@@ -1,5 +1,5 @@
-import Block from './block'
-import Vect from './vect'
+import Block from './block.js'
+import Vect from './vect.js'
 import curry from 'https://unpkg.com/ramda@0.25.0/es/curry.js'
 import map from 'https://unpkg.com/ramda@0.25.0/es/map.js'
 import reduce from 'https://unpkg.com/ramda@0.25.0/es/reduce.js'

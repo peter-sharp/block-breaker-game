@@ -1,8 +1,8 @@
-import Grid from './grid'
-import Vect from './vect'
-import Vect from './vect'
-  const BLOCK_SIZE = 30;
-  const $grid = document.querySelector('svg');
+import Grid from './grid.js'
+import Block from './block.js'
+import Vect from './vect.js'
+const BLOCK_SIZE = 30;
+const $grid = document.querySelector('svg');
 
   
   

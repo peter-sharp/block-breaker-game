@@ -1,4 +1,4 @@
-import Vect from './vect'
+import Vect from './vect.js'
 import eqProps from 'https://unpkg.com/ramda@0.25.0/es/eqProps.js'
 
 export function Block({color, state, pos}) {
