@@ -31,8 +31,8 @@ function renderBlocks($grid, blockSize, grid) {
     for(let y = 0; y < grid.sizeY; y += 1) {
       let $square = document.createElementNS('http://www.w3.org/2000/svg','rect');
       let block = Grid.getBlock(grid, {x, y})
-      $square.style.width = blockSize + 1;
-      $square.style.height = blockSize + 1;
+      $square.style.width = blockSize + 0.5;
+      $square.style.height = blockSize + 0.5;
       $square.setAttributeNS(null, 'fill', (block && block.color) || '#333')
       $square.setAttributeNS(null, 'x', x * blockSize)
       $square.setAttributeNS(null, 'y', y * blockSize)
