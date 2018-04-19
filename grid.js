@@ -1,3 +1,13 @@
+import Block from './block'
+import Vect from './vect'
+import curry from 'https://unpkg.com/ramda@0.25.0/es/curry.js'
+import map from 'https://unpkg.com/ramda@0.25.0/es/map.js'
+import reduce from 'https://unpkg.com/ramda@0.25.0/es/reduce.js'
+import compose from 'https://unpkg.com/ramda@0.25.0/es/compose.js'
+import indexOf from 'https://unpkg.com/ramda@0.25.0/es/indexOf.js'
+import prop from 'https://unpkg.com/ramda@0.25.0/es/prop.js'
+import filter from 'https://unpkg.com/ramda@0.25.0/es/filter.js'
+
 function Grid({sizeX, sizeY, blocks} = {}) {
     return {
       sizeX: sizeX || 5,
@@ -6,13 +16,13 @@ function Grid({sizeX, sizeY, blocks} = {}) {
     }
   }
 
-  Grid.getBlock = R.curry(function(grid, {x, y}) {
+  Grid.getBlock = curry(function(grid, {x, y}) {
     let block = grid.blocks[Grid.getVectId(grid, {x, y})]
     block.pos = Vect(x, y)
     return block
   })
 
-  Grid.getVectId = R.curry(function(grid, {x, y}) {
+  Grid.getVectId = curry(function(grid, {x, y}) {
     return y * grid.sizeX + x
   })
 
@@ -21,9 +31,9 @@ function Grid({sizeX, sizeY, blocks} = {}) {
     return Vect(blockId % grid.sizeX, Math.floor(blockId / grid.sizeX))
   }
   
-  Grid.addBlocks = R.curry(function (grid, blocks) {
+  Grid.addBlocks = curry(function (grid, blocks) {
     grid.blocks = grid.blocks.slice(0)
-    grid.blocks = R.reduce(
+    grid.blocks = reduce(
       (blocks, block) => {
         blocks[Grid.getVectId(grid, block.pos)] = block
         return blocks
@@ -34,28 +44,28 @@ function Grid({sizeX, sizeY, blocks} = {}) {
     return grid
   })
   
-  Grid.getBlockById = R.curry((grid, blockId) => R.prop(blockId, grid.blocks))
+  Grid.getBlockById = curry((grid, blockId) => prop(blockId, grid.blocks))
   
-  Grid.getLikeAjacentBlocks = R.curry((grid, blockId) => {
+  Grid.getLikeAjacentBlocks = curry((grid, blockId) => {
       let block = Grid.getBlockById(grid, blockId)
-      return R.compose(
-          R.filter(Block.sameColor(block)),
-          R.map(Grid.getBlock(grid)),
+      return compose(
+          filter(Block.sameColor(block)),
+          map(Grid.getBlock(grid)),
           Grid.getAdjacentVects
       )(grid, blockId)
   });
   
  
   
-  Grid.mapLikeBlocks = R.curry((fn, grid, blockId) => {
+  Grid.mapLikeBlocks = curry((fn, grid, blockId) => {
     
     function mapLikeBlocks(fn, grid, done, blockId) { 
       let block = Grid.getBlockById(grid, blockId)
       let getVectId = Grid.getVectId(grid)
       if(!block) return []
    
-      let getLikeBlocks = R.compose(
-        R.map(block => fn(block, block.pos)),
+      let getLikeBlocks = compose(
+        map(block => fn(block, block.pos)),
         Grid.getLikeAjacentBlocks(grid)
       )
 
@@ -63,10 +73,10 @@ function Grid({sizeX, sizeY, blocks} = {}) {
       let likeBlocks = getLikeBlocks(blockId)
       
   
-      return R.reduce((blocks, block) => {
+      return reduce((blocks, block) => {
         let vectId = getVectId(block.pos)
         debugger
-        if(R.indexOf(vectId, done) > -1) return blocks
+        if(indexOf(vectId, done) > -1) return blocks
         done = [vectId, ...done]
         let moreBlocks = mapLikeBlocks(fn, grid, done, vectId)
         debugger
@@ -84,9 +94,9 @@ function Grid({sizeX, sizeY, blocks} = {}) {
   
   Grid.breakAjacentBlocks = Grid.mapLikeBlocks(Block.setBroken)
 
-Grid.getAdjacentVects = R.curry(function (grid, blockId) {
+Grid.getAdjacentVects = curry(function (grid, blockId) {
   let vect = Grid.getBlockVect(grid, blockId);
-  let vects = R.map(fn => fn(vect), [
+  let vects = map(fn => fn(vect), [
     Vect.up,
     Vect.down,
     Vect.left,
@@ -96,7 +106,7 @@ Grid.getAdjacentVects = R.curry(function (grid, blockId) {
   return vects.filter(Grid.isInsideBounds(grid))
 })
 
-Grid.isInsideBounds = R.curry(function (grid, vect) {
+Grid.isInsideBounds = curry(function (grid, vect) {
   let inBounds = true
   if(vect.x < 0) inBounds = false
   if(vect.y < 0) inBounds = false
