@@ -1,13 +1,4 @@
-;(function(){
-  const BLOCK_SIZE = 30;
-  const $grid = document.querySelector('svg');
-
-  
-  
-  
-  
-  
-  function Grid({sizeX, sizeY, blocks} = {}) {
+function Grid({sizeX, sizeY, blocks} = {}) {
     return {
       sizeX: sizeX || 5,
       sizeY: sizeY || 8,
@@ -114,60 +105,4 @@ Grid.isInsideBounds = R.curry(function (grid, vect) {
   return inBounds
 })
 
-function randomPick(array) {
-  return array[Math.floor(Math.random() * array.length)];
-}
-
-let randomColor = () => randomPick(['darkgreen', 'purple', 'blue']);  
-  
-function fillWithRandomBlocks(grid) {
-  grid = Grid(grid)
-  
-  for(let x = 0; x < grid.sizeX; x += 1) {
-    for(let y = 0; y < grid.sizeY; y += 1) {
-      grid.blocks.push(Block({color: randomColor()}));
-    }
-  }
-  return grid;
-}
-
-function renderBlocks($grid, blockSize, grid) {
-  
-  for(let x = 0; x < grid.sizeX; x += 1) {
-    for(let y = 0; y < grid.sizeY; y += 1) {
-      let $square = document.createElementNS('http://www.w3.org/2000/svg','rect');
-      let block = Grid.getBlock(grid, {x, y})
-      $square.style.width = blockSize;
-      $square.style.height = blockSize;
-      $square.setAttributeNS(null, 'fill', (block && block.color) || '#333')
-      $square.setAttributeNS(null, 'x', x * blockSize)
-      $square.setAttributeNS(null, 'y', y * blockSize)
-      $square.setAttributeNS(null, 'id', `block-${Grid.getVectId(grid, {x, y})}`)
-      
-      $grid.appendChild($square)
-    }
-  }
-}
-  function getBlockId($block) {
-    return parseInt($block.id.split('-')[1], 10)
-  }
-  
-  
-  function startGame () {
-    let grid = fillWithRandomBlocks(Grid());
-    $grid.addEventListener('click', breakBlocks)
-
-    function breakBlocks(ev) {
-      if(ev.target.matches('rect')) {
-        let $block = ev.target;
-        grid = Grid.breakAjacentBlocks(grid, getBlockId($block));
-        debugger
-        
-        renderBlocks($grid, BLOCK_SIZE, grid);
-      }
-    }
-    
-    renderBlocks($grid, BLOCK_SIZE, grid);
-  }
-  startGame()
-})();
+export default Grid
