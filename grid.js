@@ -75,17 +75,16 @@ Grid.getLikeAjacentBlocks = curry((grid, blockId) => {
 
 
 
-Grid.mapLikeBlocks = curry((fn, grid, blockId) => {
-
-  function mapLikeBlocks(fn, grid, done, blockId) { 
+Grid.getLikeBlocks = curry((grid, blockId) => {
+  let getLikeAjacentBlocks = Grid.getLikeAjacentBlocks(grid)
+  
+  function getLikeBlocks(grid, done, blockId) { 
     let block = Grid.getBlockById(grid, blockId)
     let getVectId = Grid.getVectId(grid)
     if(!block) return []
 
-    let getLikeBlocks = compose(
-      map(block => fn(block, block.pos, grid)),
-      Grid.getLikeAjacentBlocks(grid)
-    )
+    
+    
 
 
     let likeBlocks = getLikeBlocks(blockId)
@@ -96,18 +95,17 @@ Grid.mapLikeBlocks = curry((fn, grid, blockId) => {
 
       if(indexOf(vectId, done) > -1) return blocks
       done = [vectId, ...done]
-      let moreBlocks = mapLikeBlocks(fn, grid, done, vectId)
+      let moreBlocks = getLikeBlocks(grid, done, vectId)
 
       return [... blocks, ...moreBlocks]
     }, likeBlocks, likeBlocks)
 
   }
   let block = Grid.getBlockById(grid, blockId)
-  block = fn(block, block.pos)
-  let blocks = mapLikeBlocks(fn, grid, [blockId],blockId)
+  let blocks = getLikeBlocks(grid, [blockId],blockId)
   blocks.push(block)
 
-  return Grid.addBlocks(grid, blocks)
+  return blocks
 })
 
 
