@@ -116,11 +116,13 @@ Grid.mapBlocksDirection = curry(function mapBlocksDirection(fn, dirFn, grid, blo
   
   let block = Grid.getBlockById(blockId)
   let nextBlock = Grid.getBlock(grid, dirFn(block.pos))
-  nextBlock = fn(Block(nextBlock))
+  nextBlock = fn(Block(nextBlock), nextBlock.pos)
   Grid.addBlock(grid, nextBlock)
   grid = mapBlocksDirection(fn, dirFn, grid, Grid.getVectId(grid, nextBlock.pos))
   return grid
 })
+
+Grid.map = curry((fn, grid) => map((block, i) => fn(block, Grid.getBlockVect(grid, i)), grid.blocks))
 
 Grid.breakAjacentBlocks = Grid.mapLikeBlocks(Block.setBroken)
 
