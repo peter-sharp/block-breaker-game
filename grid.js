@@ -98,10 +98,10 @@ Grid.getLikeBlocks = curry((grid, blockId) => {
 
   }
   let block = getBlockById(grid, blockId)
-  let blocks = getLikeBlocks([blockId], blockId)
-  blocks.push(block)
+  
 
-  return blocks
+
+  return [block, ...getLikeBlocks([blockId], blockId)]
 })
 
 
@@ -112,10 +112,7 @@ Grid.getBlocksDirection = curry(function getBlocksDirection(dirFn, grid, blockId
   let nextBlockId = Grid.getVectId(grid, nextBlock.pos)
   if(!Grid.hasBlockId(nextBlockId)) return grid
   
-
-  grid = Grid.addBlock(grid, nextBlock)
-  grid = getBlocksDirection(dirFn, grid, nextBlockId)
-  return grid
+  return [nextBlock, ...getBlocksDirection(dirFn, grid, nextBlockId)]
 })
 
 let gridMapper = curry((fn, grid, block, i) => Grid.addBlocks(fn(block, Grid.getBlockVect(grid, i), grid)))
