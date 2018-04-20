@@ -47,7 +47,7 @@ Grid.addBlocks = curry(function (grid, blocks) {
 Grid.getBlockById = curry((grid, blockId) => prop(blockId, grid.blocks))
 
 Grid.hasBlockId = function(grid, blockId){
-  return blockId > -1 && blockId < grid.sizeX 
+  return blockId > -1 && blockId < grid.sizeX * grid.sizeY 
 }
 
 Grid.getLikeAjacentBlocks = curry((grid, blockId) => {
@@ -96,8 +96,13 @@ Grid.mapLikeBlocks = curry((fn, grid, blockId) => {
   return Grid.addBlocks(grid, blocks)
 })
 
-Grid.mapBlocksDirection = curry(function mapBlocksDirection(dirFn, grid, blockId){
-  
+Grid.mapBlocksDirection = curry(function mapBlocksDirection(fn, dirFn, grid, blockId){
+  if(Grid.hasBlockId(blockId)) {
+    let block = Grid.getBlockById(blockId)
+    let nextBlock = Grid.getBlock(grid, dirFn(block.pos));
+    next
+    grid = mapBlocksDirection(fn, dirFn, grid, blockId)
+  }
 })
 
 Grid.breakAjacentBlocks = Grid.mapLikeBlocks(Block.setBroken)
