@@ -55,7 +55,7 @@ function renderBlocks($grid, blockSize, grid) {
       if(ev.target.matches('rect')) {
         let $block = ev.target;
         grid = Grid.breakAjacentBlocks(grid, getBlockId($block));
-        debugger
+       
         
         renderBlocks($grid, BLOCK_SIZE, grid);
       }

@@ -75,11 +75,11 @@ function Grid({sizeX, sizeY, blocks} = {}) {
   
       return reduce((blocks, block) => {
         let vectId = getVectId(block.pos)
-        debugger
+        
         if(indexOf(vectId, done) > -1) return blocks
         done = [vectId, ...done]
         let moreBlocks = mapLikeBlocks(fn, grid, done, vectId)
-        debugger
+        
         return [... blocks, ...moreBlocks]
       }, likeBlocks, likeBlocks)
       
