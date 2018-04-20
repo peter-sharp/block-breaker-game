@@ -3,8 +3,9 @@ import Vect from './vect'
 
 export function updateBlocksToFall(grid, block) {
   grid = Grid(grid)
-  
-  Grid.getVectId(grid, block)
+  if(!block || block.)
+  Grid.getVectId(grid, block.pos)
   
   return grid;
 }
+
