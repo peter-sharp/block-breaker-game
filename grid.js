@@ -92,7 +92,7 @@ function Grid({sizeX, sizeY, blocks} = {}) {
     return Grid.addBlocks(grid, blocks)
   })
   
-  Grid.breakAjacentBlocks = Grid.mapLikeBlocks(Block.setBroken)
+  
 
 Grid.getAdjacentVects = curry(function (grid, blockId) {
   let vect = Grid.getBlockVect(grid, blockId);

@@ -54,7 +54,7 @@ function renderBlocks($grid, blockSize, grid) {
     function breakBlocks(ev) {
       if(ev.target.matches('rect')) {
         let $block = ev.target;
-        grid = Grid.breakAjacentBlocks(grid, getBlockId($block));
+        grid = Grid.mapLikeBlocks(grid, getBlockId($block));
        
         
         renderBlocks($grid, BLOCK_SIZE, grid);
