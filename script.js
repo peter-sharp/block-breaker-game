@@ -1,3 +1,4 @@
+import {} from './grid.js'
 import Grid from './grid.js'
 import Block from './block.js'
 import Vect from './vect.js'
@@ -54,7 +55,7 @@ function renderBlocks($grid, blockSize, grid) {
     function breakBlocks(ev) {
       if(ev.target.matches('rect')) {
         let $block = ev.target;
-        grid = Grid.mapLikeBlocks(grid, getBlockId($block));
+        grid = Grid.breakAjacentBlocks(grid, getBlockId($block));
        
         
         renderBlocks($grid, BLOCK_SIZE, grid);

@@ -10,7 +10,6 @@ export function Block({color, state, pos}) {
   Block.setBroken = block => {
     block = Block(block)
     block.state = 'broken'
-    block.color = '#333'
     return block
   }
   
