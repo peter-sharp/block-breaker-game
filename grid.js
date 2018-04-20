@@ -77,48 +77,44 @@ Grid.getLikeAjacentBlocks = curry((grid, blockId) => {
 
 Grid.getLikeBlocks = curry((grid, blockId) => {
   let getLikeAjacentBlocks = Grid.getLikeAjacentBlocks(grid)
+  let getBlockById = Grid.getBlockById(grid)
+  let getVectId = Grid.getVectId(grid)
   
-  function getLikeBlocks(grid, done, blockId) { 
-    let block = Grid.getBlockById(grid, blockId)
-    let getVectId = Grid.getVectId(grid)
+  function getLikeBlocks(done, blockId) { 
+    let block = getBlockById(blockId)
     if(!block) return []
 
-    
-    
-
-
     let likeBlocks = getLikeBlocks(blockId)
-
 
     return reduce((blocks, block) => {
       let vectId = getVectId(block.pos)
 
       if(indexOf(vectId, done) > -1) return blocks
       done = [vectId, ...done]
-      let moreBlocks = getLikeBlocks(grid, done, vectId)
+      let moreBlocks = getLikeBlocks(done, vectId)
 
       return [... blocks, ...moreBlocks]
     }, likeBlocks, likeBlocks)
 
   }
-  let block = Grid.getBlockById(grid, blockId)
-  let blocks = getLikeBlocks(grid, [blockId],blockId)
+  let block = getBlockById(grid, blockId)
+  let blocks = getLikeBlocks([blockId], blockId)
   blocks.push(block)
 
   return blocks
 })
 
 
-Grid.mapBlocksDirection = curry(function mapBlocksDirection(fn, dirFn, grid, blockId){
+Grid.getBlocksDirection = curry(function getBlocksDirection(dirFn, grid, blockId){
   
-  let block = Grid.getBlockById(blockId)
+  let block = Grid.getBlockById(grid, blockId)
   let nextBlock = Grid.getBlock(grid, dirFn(block.pos))
   let nextBlockId = Grid.getVectId(grid, nextBlock.pos)
   if(!Grid.hasBlockId(nextBlockId)) return grid
   
-  nextBlock = fn(Block(nextBlock), nextBlock.pos, grid)
+
   grid = Grid.addBlock(grid, nextBlock)
-  grid = mapBlocksDirection(fn, dirFn, grid, nextBlockId)
+  grid = getBlocksDirection(dirFn, grid, nextBlockId)
   return grid
 })
 
