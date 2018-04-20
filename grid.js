@@ -110,6 +110,7 @@ Grid.mapLikeBlocks = curry((fn, grid, blockId) => {
   return Grid.addBlocks(grid, blocks)
 })
 
+
 Grid.mapBlocksDirection = curry(function mapBlocksDirection(fn, dirFn, grid, blockId){
   if(Grid.hasBlockId(blockId)) return grid
   
