@@ -83,7 +83,7 @@ Grid.mapLikeBlocks = curry((fn, grid, blockId) => {
     if(!block) return []
 
     let getLikeBlocks = compose(
-      map(block => fn(block, block.pos)),
+      map(block => fn(block, block.pos, grid)),
       Grid.getLikeAjacentBlocks(grid)
     )
 
@@ -118,13 +118,13 @@ Grid.mapBlocksDirection = curry(function mapBlocksDirection(fn, dirFn, grid, blo
   let nextBlockId = Grid.getVectId(grid, nextBlock.pos)
   if(!Grid.hasBlockId(nextBlockId)) return grid
   
-  nextBlock = fn(Block(nextBlock), nextBlock.pos)
+  nextBlock = fn(Block(nextBlock), nextBlock.pos, grid)
   grid = Grid.addBlock(grid, nextBlock)
   grid = mapBlocksDirection(fn, dirFn, grid, nextBlockId)
   return grid
 })
 
-Grid.map = curry((fn, grid) => map((block, i) => Grid.addBlocks(fn(block, Grid.getBlockVect(grid, i)), grid.blocks)))
+Grid.map = curry((fn, grid) => map((block, i) => Grid.addBlocks(fn(block, Grid.getBlockVect(grid, i), grid), grid.blocks)))
 
 Grid.breakAjacentBlocks = Grid.mapLikeBlocks(Block.setBroken)
 

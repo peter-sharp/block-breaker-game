@@ -57,7 +57,7 @@ function renderBlocks($grid, blockSize, grid) {
         let $block = ev.target;
         grid = Grid.breakAjacentBlocks(grid, getBlockId($block));
        
-        
+        grid = Grid.map(, grid)
         renderBlocks($grid, BLOCK_SIZE, grid);
       }
     }
@@ -66,4 +66,4 @@ function renderBlocks($grid, blockSize, grid) {
   }
 
   let colors = ['darkgreen', 'purple', 'blue']
-  startGame(fillWithRandomBlocks(Grid(), col))
+  startGame(fillWithRandomBlocks(Grid(), colors))
