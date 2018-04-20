@@ -13,14 +13,13 @@ function randomPick(array) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-let randomColor = () => randomPick(['darkgreen', 'purple', 'blue']);  
   
-function fillWithRandomBlocks(grid) {
+function fillWithRandomBlocks(grid, colors) {
   grid = Grid(grid)
   
   for(let x = 0; x < grid.sizeX; x += 1) {
     for(let y = 0; y < grid.sizeY; y += 1) {
-      grid.blocks.push(Block({color: randomColor()}));
+      grid.blocks.push(Block({color: randomPick(colors)}));
     }
   }
   return grid;
@@ -48,8 +47,9 @@ function renderBlocks($grid, blockSize, grid) {
   }
   
   
-  function startGame () {
-    let grid = fillWithRandomBlocks(Grid());
+  
+  function startGame (grid) {
+
     $grid.addEventListener('click', breakBlocks)
 
     function breakBlocks(ev) {
@@ -64,4 +64,6 @@ function renderBlocks($grid, blockSize, grid) {
     
     renderBlocks($grid, BLOCK_SIZE, grid);
   }
-  startGame()
+
+  let colors = ['darkgreen', 'purple', 'blue']
+  startGame(fillWithRandomBlocks(Grid(), col))
