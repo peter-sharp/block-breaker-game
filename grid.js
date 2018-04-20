@@ -31,6 +31,12 @@ Grid.getBlockVect = function(grid, blockId) {
   return Vect(blockId % grid.sizeX, Math.floor(blockId / grid.sizeX))
 }
 
+/**
+* updates blocks in grid with given blocks 
+* {Grid} grid
+* {array} blocks
+* 
+*/
 Grid.addBlocks = curry(function (grid, blocks) {
   grid.blocks = grid.blocks.slice(0)
   grid.blocks = reduce(
@@ -41,6 +47,14 @@ Grid.addBlocks = curry(function (grid, blocks) {
     grid.blocks,
     blocks
   )
+  return grid
+})
+
+Grid.addBlock = curry(function (grid, block) {
+  grid.blocks = grid.blocks.slice(0)
+ 
+  grid.blocks[Grid.getVectId(grid, block.pos)] = block
+  
   return grid
 })
 
@@ -97,12 +111,14 @@ Grid.mapLikeBlocks = curry((fn, grid, blockId) => {
 })
 
 Grid.mapBlocksDirection = curry(function mapBlocksDirection(fn, dirFn, grid, blockId){
-  if(Grid.hasBlockId(blockId)) {
-    let block = Grid.getBlockById(blockId)
-    let nextBlock = Grid.getBlock(grid, dirFn(block.pos));
-    next
-    grid = mapBlocksDirection(fn, dirFn, grid, blockId)
-  }
+  if(Grid.hasBlockId(blockId)) return grid
+  
+  let block = Grid.getBlockById(blockId)
+  let nextBlock = Grid.getBlock(grid, dirFn(block.pos))
+  nextBlock = fn(Block(nextBlock))
+  Grid.addBlock(grid, nextBlock)
+  grid = mapBlocksDirection(fn, dirFn, grid, Grid.getVectId(grid, nextBlock.pos))
+  return grid
 })
 
 Grid.breakAjacentBlocks = Grid.mapLikeBlocks(Block.setBroken)
