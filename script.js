@@ -2,6 +2,7 @@ import {} from './grid.js'
 import Grid from './grid.js'
 import Block from './block.js'
 import Vect from './vect.js'
+import map from 'https://unpkg.com/ramda@0.25.0/es/map.js'
 const BLOCK_SIZE = 30;
 const $grid = document.querySelector('svg');
 
@@ -55,9 +56,9 @@ function renderBlocks($grid, blockSize, grid) {
     function breakBlocks(ev) {
       if(ev.target.matches('rect')) {
         let $block = ev.target;
-        grid = Grid.breakAjacentBlocks(grid, getBlockId($block));
+        let likeBlocks = Grid.getLikeBlocks(grid, getBlockId($block));
        
-        grid = Grid.map(, grid)
+        likeBlocks = map(Block.setBroken,
         renderBlocks($grid, BLOCK_SIZE, grid);
       }
     }

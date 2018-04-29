@@ -119,8 +119,6 @@ let gridMapper = curry((fn, grid, block, i) => Grid.addBlocks(fn(block, Grid.get
 
 Grid.map = curry((fn, grid) => map(gridMapper(fn, grid), grid.blocks))
 
-Grid.breakAjacentBlocks = Grid.mapLikeBlocks(Block.setBroken)
-
 Grid.getAdjacentVects = curry(function (grid, blockId) {
   let vect = Grid.getBlockVect(grid, blockId);
   let vects = map(fn => fn(vect), [
