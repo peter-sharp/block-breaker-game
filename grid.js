@@ -93,10 +93,11 @@ Grid.getLikeBlocks = curry((grid, blockId) => {
       done = [vectId, ...done]
       let moreBlocks = getLikeBlocks(done, vectId)
 
-      return [... blocks, ...moreBlocks]
+      return [...blocks, ...moreBlocks]
     }, likeBlocks, likeBlocks)
 
   }
+  debugger
   let block = getBlockById(grid, blockId)
   
 
