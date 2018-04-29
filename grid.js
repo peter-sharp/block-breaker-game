@@ -84,7 +84,7 @@ Grid.getLikeBlocks = curry((grid, blockId) => {
     let block = getBlockById(blockId)
     if(!block) return []
 
-    let likeBlocks = getLikeBlocks(blockId)
+    let likeBlocks = getLikeAjacentBlocks(blockId)
 
     return reduce((blocks, block) => {
       let vectId = getVectId(block.pos)
@@ -97,8 +97,8 @@ Grid.getLikeBlocks = curry((grid, blockId) => {
     }, likeBlocks, likeBlocks)
 
   }
-  debugger
-  let block = getBlockById(grid, blockId)
+  
+  let block = getBlockById(blockId)
   
 
 
