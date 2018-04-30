@@ -104,7 +104,15 @@ Grid.getLikeBlocks = curry((grid, blockId) => {
 
   return [block, ...getLikeBlocks([blockId], blockId)]
 })
-Grid.getTopmostBlocks = curry(function
+
+Grid.getLeftmostBlocks = curry(function getLeftmostBlocks() {}) //TODO
+
+/**
+ * gets the topmost blocks along the x axis of a given array of blocks
+ */
+Grid.getTopmostBlocks = curry(function getTopmostBlocks(grid, blocks) {
+  
+})
 
 Grid.getBlocksDirection = curry(function getBlocksDirection(dirFn, grid, blockId){
   
