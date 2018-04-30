@@ -1,4 +1,3 @@
-import {} from './grid.js'
 import Grid from './grid.js'
 import Block from './block.js'
 import Vect from './vect.js'
@@ -67,6 +66,8 @@ function startGame (grid, renderFn) {
       let likeBlocks = Grid.getLikeBlocks(grid, getBlockId($block));
 
       likeBlocks = map(Block.setBroken, likeBlocks);
+      
+      let blocksToFall = map(Block.setBroken, likeBlocks);
       
       grid = Grid.addBlocks(grid, likeBlocks);
       debugger

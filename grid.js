@@ -104,14 +104,14 @@ Grid.getLikeBlocks = curry((grid, blockId) => {
 
   return [block, ...getLikeBlocks([blockId], blockId)]
 })
-
+Grid.getTopmostBlocks = curry(function
 
 Grid.getBlocksDirection = curry(function getBlocksDirection(dirFn, grid, blockId){
   
   let block = Grid.getBlockById(grid, blockId)
   let nextBlock = Grid.getBlock(grid, dirFn(block.pos))
   let nextBlockId = Grid.getVectId(grid, nextBlock.pos)
-  if(!Grid.hasBlockId(nextBlockId)) return grid
+  if(!Grid.hasBlockId(nextBlockId)) return [block]
   
   return [nextBlock, ...getBlocksDirection(dirFn, grid, nextBlockId)]
 })
