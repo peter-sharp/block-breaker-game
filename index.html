@@ -23,24 +23,5 @@
     <script src="https://button.glitch.me/button.js"></script>
     <!-- import the webpage's javascript file -->
     <script src="/script.js" type="module"></script>
-    
-    <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
-
-    <xml id="toolbox" style="display: none">
-      <block type="controls_if"></block>
-      <block type="logic_compare"></block>
-      <block type="controls_repeat_ext"></block>
-      <block type="math_number"></block>
-      <block type="math_arithmetic"></block>
-      <block type="text"></block>
-      <block type="text_print"></block>
-    </xml>
-
-    <script>
-      var workspace = Blockly.inject('blocklyDiv',
-          {media: 'https://unpkg.com/blockly@1.0.0/media/',
-           toolbox: document.getElementById('toolbox')});
-    </script>
-    
   </body>
 </html>

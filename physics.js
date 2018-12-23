@@ -4,6 +4,6 @@ import Vect from './vect'
 export function updateBlocksToFall(block, blockId) {
   
   
-  return grid;
+  // return grid;
 }
 

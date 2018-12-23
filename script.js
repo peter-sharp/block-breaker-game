@@ -70,7 +70,7 @@ function startGame (grid, renderFn) {
       let blocksToFall = map(Block.setBroken, likeBlocks);
       
       grid = Grid.addBlocks(grid, likeBlocks);
-      debugger
+      
       renderFn(grid);
     }
   }
@@ -79,4 +79,5 @@ function startGame (grid, renderFn) {
 }
 
 let colors = ['darkgreen', 'purple', 'blue']
+debugger
 startGame(fillWithRandomBlocks(Grid(), colors), renderBlocks($grid, BLOCK_SIZE))
