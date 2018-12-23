@@ -27,7 +27,7 @@ function startGame (grid, renderFn) {
 
       likeBlocks = map(Block.setBroken, likeBlocks);
       
-      let blocksToFall = map(Block.setBroken, likeBlocks);
+      // let blocksToFall = map(Block.setBroken, likeBlocks);
       
       grid = Grid.addBlocks(grid, likeBlocks);
       
