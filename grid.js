@@ -1,12 +1,12 @@
 import Block from './block.js'
 import Vect from './vect.js'
-import curry from 'https://unpkg.com/ramda@0.25.0/es/curry.js'
-import map from 'https://unpkg.com/ramda@0.25.0/es/map.js'
-import reduce from 'https://unpkg.com/ramda@0.25.0/es/reduce.js'
-import compose from 'https://unpkg.com/ramda@0.25.0/es/compose.js'
-import indexOf from 'https://unpkg.com/ramda@0.25.0/es/indexOf.js'
-import prop from 'https://unpkg.com/ramda@0.25.0/es/prop.js'
-import filter from 'https://unpkg.com/ramda@0.25.0/es/filter.js'
+import curry from '/web_modules/ramda/es/curry.js'
+import map from '/web_modules/ramda/es/map.js'
+import reduce from '/web_modules/ramda/es/reduce.js'
+import compose from '/web_modules/ramda/es/compose.js'
+import indexOf from '/web_modules/ramda/es/indexOf.js'
+import prop from '/web_modules/ramda/es/prop.js'
+import filter from '/web_modules/ramda/es/filter.js'
 
 function Grid({sizeX, sizeY, blocks} = {}) {
   return {

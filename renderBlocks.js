@@ -1,5 +1,5 @@
 
-import curry from 'https://unpkg.com/ramda@0.25.0/es/curry.js'
+import curry from '/web_modules/ramda/es/curry.js'
 import Grid from './grid.js'
 import Block from './block.js'
 import s from './svg.js'

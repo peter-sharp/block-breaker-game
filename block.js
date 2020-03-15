@@ -1,5 +1,5 @@
 import Vect from './vect.js'
-import eqProps from 'https://unpkg.com/ramda@0.25.0/es/eqProps.js'
+import eqProps from '/web_modules/ramda/es/eqProps.js'
 
 export function Block({color, state, pos} = {}) {
     return {color: color || "#333", state: 'alive', pos: pos || Vect()}

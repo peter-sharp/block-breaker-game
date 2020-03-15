@@ -1,8 +1,8 @@
 import Grid from './grid.js'
 import Block from './block.js'
 import Vect from './vect.js'
-import map from 'https://unpkg.com/ramda@0.25.0/es/map.js'
-import curry from 'https://unpkg.com/ramda@0.25.0/es/curry.js'
+import map from '/web_modules/ramda/es/map.js'
+import curry from '/web_modules/ramda/es/curry.js'
 import fillWithRandomBlocks from './fillWithRandomBlocks.js'
 import renderBlocks from './renderBlocks.js'
 

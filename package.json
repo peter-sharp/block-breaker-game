@@ -1,0 +1,22 @@
+{
+  "name": "block-breaker-game",
+  "version": "1.0.0",
+  "description": "Welcome to Glitch =================",
+  "main": "script.js",
+  "scripts": {
+    "prepare": "snowpack --include \"./**/*.js\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "false"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ramda": "^0.27.0"
+  },
+  "devDependencies": {
+    "snowpack": "^1.6.0"
+  }
+}
