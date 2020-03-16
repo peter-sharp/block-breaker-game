@@ -4,7 +4,7 @@ export default function svg(tag, attrs = {}, children = []) {
   let el = document.createElementNS(NS, tag);
   
   for(let attr in attrs) {
-    el.setAttributeNS(NS, attr, attrs[attr])
+    el.setAttributeNS(null, attr, attrs[attr])
   }
   
   children.forEach( (child) => {

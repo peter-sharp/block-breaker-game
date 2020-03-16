@@ -39,5 +39,4 @@ function startGame (grid, renderFn) {
 }
 
 let colors = ['darkgreen', 'purple', 'blue']
-debugger
 startGame(fillWithRandomBlocks(Grid(), colors), renderBlocks($grid, BLOCK_SIZE))
