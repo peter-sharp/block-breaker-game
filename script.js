@@ -2,6 +2,7 @@ import Grid from './grid.js'
 import Block from './block.js'
 import Vect from './vect.js'
 import map from '/web_modules/ramda/es/map.js'
+import filter from '/web_modules/ramda/es/filter.js'
 import curry from '/web_modules/ramda/es/curry.js'
 import fillWithRandomBlocks from './fillWithRandomBlocks.js'
 import renderBlocks from './renderBlocks.js'
@@ -27,7 +28,7 @@ function startGame (grid, renderFn) {
 
       likeBlocks = map(Block.setBroken, likeBlocks);
       
-      // let blocksToFall = map(Block.setBroken, likeBlocks);
+      let blocksToFall = Grid.getBlocksAboveBlocks(grid, likeBlocks);
       
       grid = Grid.addBlocks(grid, likeBlocks);
       

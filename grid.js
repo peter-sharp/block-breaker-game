@@ -114,6 +114,16 @@ Grid.getTopmostBlocks = curry(function getTopmostBlocks(grid, blocks) {
   
 })
 
+Grid.getBlocksAboveBlocks = curry(function getBlocksAboveBlocks(grid, blocks) {
+  let blocksAbove = {};
+  
+  blocks.forEach(function findBlocksAbove(block) {
+    
+  })
+
+  return blocksAbove
+});
+
 Grid.getBlocksDirection = curry(function getBlocksDirection(dirFn, grid, blockId){
   
   let block = Grid.getBlockById(grid, blockId)
@@ -125,6 +135,10 @@ Grid.getBlocksDirection = curry(function getBlocksDirection(dirFn, grid, blockId
 })
 
 let gridMapper = curry((fn, grid, block, i) => Grid.addBlocks(fn(block, Grid.getBlockVect(grid, i), grid)))
+
+Grid.getBlocksAbove = Grid.getBlocksDirection(function getAbove({ x, y }) {
+  return { x, y: y - 1 }
+})
 
 Grid.map = curry((fn, grid) => map(gridMapper(fn, grid), grid.blocks))
 
