@@ -4,29 +4,37 @@ import Grid from './grid.js'
 import Block from './block.js'
 import s from './svg.js'
 
-let renderBlocks = curry(function($grid, blockSize, grid) {
-  
-  for(let x = 0; x < grid.sizeX; x += 1) {
-    for(let y = 0; y < grid.sizeY; y += 1) {
+let renderBlocks = curry(function($grid,  grid) {
+  const { blocks } = grid;
+  let updatedSquares = [];
+  for(let block of blocks) {
       
-      let block = Grid.getBlock(grid, {x, y})
-      
-      let width = blockSize + 0.5;
-      let height = blockSize + 0.5;
-      
-      let fill = (block.state == 'broken') ? '#333' : (block && block.color) || '#333'
-      let $square = s(
-        'rect',
-        {
-          width,
-          height,
-          x: x * blockSize,
-          y: y * blockSize,
-          id: `block-${Grid.getVectId(grid, {x, y})}`,
-          fill
+      const { x, y, state, color, id, width, height } = block;
+     
+      let $square = $grid.getElementById(`block-${id}`)
+      if($square) {
+        $square.setAttributeNS(null, 'x', x);
+        $square.setAttributeNS(null, 'y', y);
+        $square.className.baseVal = `block block--${state} ${color ? `block--${color}`: ''}`;
+      } else {
+        $square = s(
+          'rect',
+          {
+            width: width + 0.5,
+            height: height + 0.5,
+            x,
+            y,
+            id: `block-${id}`,
+            class: `block block--${state} ${color ? `block--${color}`: ''}`
         })
-      
-      $grid.appendChild($square)
+        $grid.appendChild($square);
+      }
+      updatedSquares.push($square);
+  }
+
+  for (const $square of $grid.children) {
+    if(!updatedSquares.includes($square)) {
+      $square.remove();
     }
   }
 })

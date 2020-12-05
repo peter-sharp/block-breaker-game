@@ -17,3 +17,27 @@ svg {
   height: 100vh;
   width: 100%;
 }
+.block {
+  transition: opacity 600ms;
+  opacity: 1;
+}
+.block--green {
+  fill: var(--green, #196);
+}
+.block--red {
+  fill: var(--red, #b13);
+}
+.block--blue {
+  fill: var(--blue, #369);
+}
+.block--yellow {
+  fill: var(--yellow, #d90);
+}
+
+.block--broken {
+  opacity: 0;
+}
+
+.block--falling {
+  opacity: 0.5;
+}

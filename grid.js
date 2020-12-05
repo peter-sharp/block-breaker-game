@@ -5,30 +5,48 @@ import map from '/web_modules/ramda/es/map.js'
 import reduce from '/web_modules/ramda/es/reduce.js'
 import compose from '/web_modules/ramda/es/compose.js'
 import indexOf from '/web_modules/ramda/es/indexOf.js'
+import differenceWith from '/web_modules/ramda/es/differenceWith.js'
 import prop from '/web_modules/ramda/es/prop.js'
 import filter from '/web_modules/ramda/es/filter.js'
 
-function Grid({sizeX, sizeY, blocks} = {}) {
+const BLOCK_SIZE = 30;
+/**
+ * 
+ * Holds blocks and provides methods to access them according to the meta-grid
+ * @param {int} sizeX x dimension of the meta-grid
+ * @param {int} sizeY y dimension of the meta-grid
+ * @param {int} width/height of a block in the grid
+ * @param {array} blocks in grid
+ */
+function Grid({sizeX = 8, sizeY = 8, blockSize = BLOCK_SIZE, blocks = []} = {}) {
   return {
     sizeX: sizeX || 5,
     sizeY: sizeY || 8,
+    blockSize: blockSize || 30,
     blocks: blocks || []
   }
 }
 
-Grid.getBlock = curry(function(grid, {x, y}) {
-  let block = grid.blocks[Grid.getVectId(grid, {x, y})]
-  block.pos = Vect(x, y)
-  return block
+/**
+ * @param {Grid} grid
+ * @param {Object} grid coordinate vector
+ */
+Grid.getBlock = curry(function getBlock(grid, {x, y}) {
+  return grid.blocks.find(({ pos }) => Math.floor(pos.x / grid.blockSize) == x && Math.floor(pos.y / grid.blockSize) == y)
 })
 
-Grid.getVectId = curry(function(grid, {x, y}) {
-  return y * grid.sizeX + x
-})
+// Grid.getVectId = curry(function(grid, {x, y}) {
+//   return y * grid.sizeX + x
+// })
 
 
-Grid.getBlockVect = function(grid, blockId) {
-  return Vect(blockId % grid.sizeX, Math.floor(blockId / grid.sizeX))
+Grid.getBlockVect = function getBlockVect(grid, { x, y }) {
+  return Vect(Math.floor(x / grid.blockSize), Math.floor(y / grid.blockSize));
+}
+
+Grid.snap = function snap(grid, { x, y }) {
+  const gridPos = Grid.getBlockVect(grid, { x, y });
+  return Vect(gridPos.x * grid.blockSize, gridPos.y * grid.blockSize);
 }
 
 /**
@@ -37,75 +55,62 @@ Grid.getBlockVect = function(grid, blockId) {
 * {array} blocks
 * 
 */
-Grid.addBlocks = curry(function (grid, blocks) {
-  grid.blocks = grid.blocks.slice(0)
-  grid.blocks = reduce(
-    (blocks, block) => {
-      blocks[Grid.getVectId(grid, block.pos)] = block
-      return blocks
-    },
-    grid.blocks,
-    blocks
-  )
-  return grid
+Grid.assignBlocks = curry(function (grid, newBlocks) {
+  const untouched = differenceWith((x,y) => x.id === y.id, grid.blocks, newBlocks);
+  grid.blocks = [...untouched, ...newBlocks];
+  return grid;
 })
 
-Grid.addBlock = curry(function (grid, block) {
-  grid.blocks = grid.blocks.slice(0)
+// Grid.addBlock = curry(function (grid, block) {
+//   grid.blocks = grid.blocks.slice(0)
  
-  grid.blocks[Grid.getVectId(grid, block.pos)] = block
+//   grid.blocks[Grid.getVectId(grid, block.pos)] = block
   
-  return grid
-})
+//   return grid
+// })
 
-Grid.getBlockById = curry((grid, blockId) => prop(blockId, grid.blocks))
+Grid.getBlockById = curry(function getBlockById(grid, blockId) {
+  return grid.blocks.find(({ id }) => id == blockId)
+});
 
 Grid.hasBlockId = function(grid, blockId){
-  return blockId > -1 && blockId < grid.sizeX * grid.sizeY 
+  return !!Grid.getBlockById(grid, blockId); 
 }
 
-Grid.getLikeAjacentBlocks = curry((grid, blockId) => {
-    let block = Grid.getBlockById(grid, blockId)
+Grid.getLikeAjacentBlocks = curry((grid, block) => {
     return compose(
         filter(Block.sameColor(block)),
+        filter(x => x),
         map(Grid.getBlock(grid)),
         Grid.getAdjacentVects
-    )(grid, blockId)
+    )(grid, block)
 });
 
 
 
-Grid.getLikeBlocks = curry((grid, blockId) => {
+Grid.getLikeBlocks = curry((grid, block) => {
   let getLikeAjacentBlocks = Grid.getLikeAjacentBlocks(grid)
-  let getBlockById = Grid.getBlockById(grid)
-  let getVectId = Grid.getVectId(grid)
   
-  function getLikeBlocks(done, blockId) { 
-    let block = getBlockById(blockId)
-    if(!block) return []
+  function getLikeBlocks(done, block = null) { 
+    if(!block) return [];
 
-    let likeBlocks = getLikeAjacentBlocks(blockId)
+    let likeBlocks = getLikeAjacentBlocks(block)
 
     return reduce((blocks, block) => {
-      let vectId = getVectId(block.pos)
+      if(indexOf(block.id, done) > -1) return blocks;
+      done = [block.id, ...done];
+      const neibourBlocks = getLikeBlocks(done, block);
 
-      if(indexOf(vectId, done) > -1) return blocks
-      done = [vectId, ...done]
-      let moreBlocks = getLikeBlocks(done, vectId)
-
-      return [...blocks, ...moreBlocks]
+      return [...blocks, ...neibourBlocks]
     }, likeBlocks, likeBlocks)
 
   }
   
-  let block = getBlockById(blockId)
-  
 
-
-  return [block, ...getLikeBlocks([blockId], blockId)]
+  return [block, ...getLikeBlocks([block.id], block)]
 })
 
-Grid.getLeftmostBlocks = curry(function getLeftmostBlocks() {}) //TODO
+// Grid.getLeftmostBlocks = curry(function getLeftmostBlocks() {}) //TODO
 
 /**
  * gets the topmost blocks along the x axis of a given array of blocks
@@ -115,35 +120,28 @@ Grid.getTopmostBlocks = curry(function getTopmostBlocks(grid, blocks) {
 })
 
 Grid.getBlocksAboveBlocks = curry(function getBlocksAboveBlocks(grid, blocks) {
-  let blocksAbove = {};
+  let blocksAbove = new Set();
   
   blocks.forEach(function findBlocksAbove(block) {
-    
+    blocksAbove = new Set(Array.from(blocksAbove).concat(grid.blocks.filter(function isAboveBlock(x) {
+      const xCoord = Grid.getBlockVect(grid, x);
+      const blockCoord = Grid.getBlockVect(grid, block);
+      return xCoord.x == blockCoord.x && xCoord.y <= blockCoord.y;
+    })));
   })
 
-  return blocksAbove
+  return Array.from(blocksAbove);
 });
 
-Grid.getBlocksDirection = curry(function getBlocksDirection(dirFn, grid, blockId){
-  
-  let block = Grid.getBlockById(grid, blockId)
-  let nextBlock = Grid.getBlock(grid, dirFn(block.pos))
-  let nextBlockId = Grid.getVectId(grid, nextBlock.pos)
-  if(!Grid.hasBlockId(nextBlockId)) return [block]
-  
-  return [nextBlock, ...getBlocksDirection(dirFn, grid, nextBlockId)]
-})
 
-let gridMapper = curry((fn, grid, block, i) => Grid.addBlocks(fn(block, Grid.getBlockVect(grid, i), grid)))
 
-Grid.getBlocksAbove = Grid.getBlocksDirection(function getAbove({ x, y }) {
-  return { x, y: y - 1 }
-})
+Grid.map = function mapGrid(fn, grid) {
+  grid.blocks = map(fn, grid.blocks);
+  return grid;
+}
 
-Grid.map = curry((fn, grid) => map(gridMapper(fn, grid), grid.blocks))
-
-Grid.getAdjacentVects = curry(function (grid, blockId) {
-  let vect = Grid.getBlockVect(grid, blockId);
+Grid.getAdjacentVects = curry(function getAdjacentVects(grid, block) {
+  let vect = Grid.getBlockVect(grid, block);
   let vects = map(fn => fn(vect), [
     Vect.up,
     Vect.down,
